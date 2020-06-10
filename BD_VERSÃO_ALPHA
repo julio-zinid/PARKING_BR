@@ -28,10 +28,11 @@ CREATE TABLE estacionamento (
     codest INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     cnpj varchar (30),
     razaosocial VARCHAR(30),
-    endereco VARCHAR(30),
+    endereco VARCHAR(80),
     telefone VARCHAR(12),
-    latitude INT,
-    longitude INT,
+    latitude float(10,6),
+    longitude float(10,6),
+    type varchar(30),
     admin_codadmin INT NOT NULL
 );
 
