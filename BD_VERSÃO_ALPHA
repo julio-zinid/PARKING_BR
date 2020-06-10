@@ -1,0 +1,115 @@
+CREATE DATABASE PARKINGBR
+
+CREATE TABLE admin (
+    codadmin INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    nome VARCHAR(30),
+    sobrenome VARCHAR(30),
+    documento VARCHAR(30),
+    telefone VARCHAR(12),
+    perfil VARCHAR(30),
+    usuario_email VARCHAR(30) NOT NULL
+);
+
+
+
+CREATE TABLE cliente (
+    codcliente     INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    pessoa VARCHAR(30),
+    nome VARCHAR(30),
+    sobrenome VARCHAR(30),
+    documento VARCHAR(30),
+    telefone VARCHAR(12),
+    perfil VARCHAR(20),
+    decisaoopcao INT,
+    usuario_email  VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE estacionamento (
+    codest INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    cnpj varchar (30),
+    razaosocial VARCHAR(30),
+    endereco VARCHAR(30),
+    telefone VARCHAR(12),
+    latitude INT,
+    longitude INT,
+    admin_codadmin INT NOT NULL
+);
+
+CREATE TABLE gestor (
+    codgestor INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    nome VARCHAR(25),
+    sobrenome VARCHAR(25),
+    documento VARCHAR(30),
+    cpf VARCHAR(11),
+    telefone VARCHAR(12),
+    perfil VARCHAR(30),
+    usuario_email VARCHAR(30) NOT NULL
+);
+
+
+CREATE TABLE usuario (
+    email  VARCHAR(30) PRIMARY KEY NOT NULL,
+    senha  VARCHAR(30)
+);
+
+CREATE TABLE vaga (
+    codvaga INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    horaentrada VARCHAR(8),
+    horasaida VARCHAR(8),
+    dataentrada VARCHAR(10),
+    datasaida VARCHAR(10),
+    disponibilidade INT,
+    valorreserva float(4, 2),
+    valorhora float(4, 2),
+    veiculo_codveiculo INT NOT NULL,
+    gestor_codgestor INT NOT NULL,
+    admin_codadmin INT NOT NULL,
+    estacionamento_codest INT NOT NULL
+);
+
+CREATE TABLE veiculo (
+    codveiculo INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    decisaoveiculo VARCHAR(30),
+    placa VARCHAR(8),
+    modelo VARCHAR(30),
+    ano INT,
+    fabricante VARCHAR(30),
+    cor VARCHAR(30),
+    cliente_codcliente INT NOT NULL
+);
+
+ALTER TABLE admin
+    ADD CONSTRAINT admin_usuario_fk FOREIGN KEY ( usuario_email )
+        REFERENCES usuario ( email );
+
+ALTER TABLE cliente
+    ADD CONSTRAINT cliente_usuario_fk FOREIGN KEY ( usuario_email )
+        REFERENCES usuario ( email );
+
+ALTER TABLE estacionamento
+    ADD CONSTRAINT estacionamento_admin_fk FOREIGN KEY ( admin_codadmin )
+        REFERENCES admin ( codadmin );
+
+ALTER TABLE gestor
+    ADD CONSTRAINT gestor_usuario_fk FOREIGN KEY ( usuario_email )
+        REFERENCES usuario ( email );
+
+ALTER TABLE vaga
+    ADD CONSTRAINT vaga_admin_fk FOREIGN KEY ( admin_codadmin )
+        REFERENCES admin ( codadmin );
+
+ALTER TABLE vaga
+    ADD CONSTRAINT vaga_estacionamento_fk FOREIGN KEY ( estacionamento_codest )
+        REFERENCES estacionamento ( codest );
+
+ALTER TABLE vaga
+    ADD CONSTRAINT vaga_gestor_fk FOREIGN KEY ( gestor_codgestor )
+        REFERENCES gestor ( codgestor );
+
+ALTER TABLE vaga
+    ADD CONSTRAINT vaga_veiculo_fk FOREIGN KEY ( veiculo_codveiculo )
+        REFERENCES veiculo ( codveiculo );
+
+ALTER TABLE veiculo
+    ADD CONSTRAINT veiculo_cliente_fk FOREIGN KEY ( cliente_codcliente )
+        REFERENCES cliente ( codcliente );
